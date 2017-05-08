@@ -1,0 +1,6 @@
+.DS_Store
+.bundle
+*.swp
+*.swo
+tmp
+*.pyc
