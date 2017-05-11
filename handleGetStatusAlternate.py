@@ -10,7 +10,7 @@ def handleGetStatusAlternate(event, context):
         response = {}
         response['headers'] = {}
         response['statusCode'] = 200
-        response['body'] = "SDB domains: " + str(list_domains())
+        response['body'] = "SDB domains: " + str(list_domains()) + "event" + str(event) + "context" + str(context)
         return response
     except Exception as e:
         return handleError(e)

@@ -24,10 +24,13 @@ import re
 # * We also don't need this deployment file.
 
 whitelist= ["./*.py", "venv/lib/python3*/site-packages/*"]
-blacklist = ["./deploy.py", 
+blacklist = ["./deploy.py",
+# These are provided by Amazon for lamba installs
         "venv/lib/python3*/site-packages/boto3*", 
         "venv/lib/python3*/site-packages/botocore*", 
         "venv/lib/python3*/site-packages/s3transfer*",
+# These are part of the python / pip dependency chain
+        "venv/lib/python3*/site-packages/pip*",
         "./deploy/*"]
 
 unfiltered_whitelist_files = []
