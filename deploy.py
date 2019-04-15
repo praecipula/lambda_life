@@ -57,7 +57,7 @@ os.makedirs("./deploy", exist_ok=True)
 # We need to strip the leading directory from any pip packages
 strip_regex = re.compile(".*/site-packages/(?P<branch>.*)")
 
-zipfilename = ("./deploy/" + datetime.datetime.utcnow().isoformat() + ".zip").replace(':', '_')
+zipfilename = ("./staged_bundle/" + datetime.datetime.utcnow().isoformat() + ".zip").replace(':', '_')
 with zipfile.ZipFile(zipfilename, 'w') as zipfile:
     for filename in includes:
         # Here's where we match and strip any package prefix (so unzip will inflate into the root dir)
@@ -71,20 +71,21 @@ with zipfile.ZipFile(zipfilename, 'w') as zipfile:
 print("Created zipfile: " + zipfilename)
 
 # OK, after all that, we have to deploy with boto.
-client = boto3.client('lambda')
+session = boto3.Session(profile_name='autodash')
+client = session.client('lambda')
 
 #Reopen the file to read it, but just as bytes now.
 with open(zipfilename, 'rb') as zipfile:
-    function_name = 'handleGetStatusAlternate'
+    function_name = 'dispatch'
     if function_name in [fn['FunctionName'] for fn in client.list_functions()['Functions']]:
         # Do an update, not a create
         response = client.update_function_code(FunctionName=function_name, ZipFile=zipfile.read())
     else:
         response = client.create_function(
-            FunctionName='handleGetStatusAlternate',
+            FunctionName='dispatch',
             Runtime='python3.6',
-            Role='arn:aws:iam::789554281416:role/service-role/testLambdaRunner',
-            Handler='handleGetStatusAlternate.handleGetStatusAlternate',
+            Role='arn:aws:iam::789554281416:role/autodashLambda',
+            Handler='dispatch.dispatch',
             Code={
                 'ZipFile': zipfile.read(),
                 },

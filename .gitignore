@@ -5,4 +5,4 @@
 tmp
 *.pyc
 venv
-deploy
+staged_bundle
