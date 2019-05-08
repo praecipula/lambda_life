@@ -1,0 +1,13 @@
+{
+    "production": {
+        "app_function": "automaton.app.app",
+        "aws_region": "us-west-2",
+        "profile_name": "autodash",
+        "project_name": "lambda-life",
+        "runtime": "python3.7",
+        "s3_bucket": "autodash-source"
+        "manage_roles": false,
+        "role_name": "autodashLambda",
+        "role_arn": "arn:aws:iam::789554281416:role/autodashLambda",
+    }
+}
